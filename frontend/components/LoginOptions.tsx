@@ -19,7 +19,6 @@ export default function LoginOptions() {
       component="section"
       sx={{
         display: 'grid',
-        gridTemplateCols:'1fr',
         gridGap: '1rem',
         margin: 'auto',
         width: '25rem'

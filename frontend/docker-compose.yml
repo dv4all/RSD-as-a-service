@@ -9,8 +9,8 @@ services:
       # dockerfile: Dockerfile_scratch
       dockerfile: Dockerfile
     image: rsd/fe-next:0.0.1
-    # env_file:
-    #   # configuration
-    #   - .env.production.local
+    env_file:
+      # configuration
+      - .env.production.local
     ports:
-      - "5000:3000"
+      - "3000:3000"
