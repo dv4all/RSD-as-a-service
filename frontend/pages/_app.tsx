@@ -1,3 +1,4 @@
+import { SessionProvider } from "next-auth/react"
 import Head from 'next/head';
 import {AppProps} from 'next/app'
 import {ThemeProvider} from '@mui/material/styles';
@@ -18,8 +19,9 @@ export interface MuiAppProps extends AppProps{
 }
 
 export default function RsdApp(props:MuiAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  // console.log("RsdApp.emotionCache...", emotionCache)
+  const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
+  const {pageProps:{session}} = props
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -29,7 +31,9 @@ export default function RsdApp(props:MuiAppProps) {
       <ThemeProvider theme={rsdTheme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...pageProps} />
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </ThemeProvider>
     </CacheProvider>
   );

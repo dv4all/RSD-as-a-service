@@ -41,19 +41,13 @@ Customization in MUI5 is done using [theme object](https://mui.com/customization
 The theme is provided at the root React component using Theme context provider.
 In short, add theme provider to \_app.tsx file
 
+### Authentication
+
+For authentication we use `next-auth`.
+
 ## Default readme content of NextJS
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
