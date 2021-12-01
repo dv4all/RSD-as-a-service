@@ -11,26 +11,29 @@ import { createTheme } from "@mui/material/styles";
 import { blue, orange, red } from '@mui/material/colors'
 
 // define color variables to use
-// further in the config
-const colPrimary = blue[500]
-const colSecond = orange[500]
-const colError = red[600]
+const colorPrimary = '#00A3E3'
+const colorSecondary = '#222425'
+const colorTextPrimary = 'rgba(34,36,37,1)'
+const colorTextSecondary = 'rgba(34,36,37,0.87)'
+const colorTextDisabled = 'rgba(34,36,37,0.45)'
+const colorDivider = '#DDD'
+const colorBase100 = '#FFF'
+const colorBase200 = '#EEE'
 
 const rsdTheme = createTheme({
   palette: {
     primary: {
-      main: colPrimary,
+      main: colorPrimary,
     },
     secondary: {
-      main: colSecond,
+      main: colorSecondary,
     },
-    error:{
-      main: colError
+    divider: colorDivider,
+    text: {
+      primary: colorTextPrimary,
+      secondary: colorTextSecondary,
+      disabled: colorTextDisabled,
     },
-    background:{
-      // we use this background in stricky header
-      paper: 'rgba(255,255,255,0.98)'
-    }
   },
   shape:{
     borderRadius: 2
@@ -39,7 +42,7 @@ const rsdTheme = createTheme({
     // change default fonts to OpenSans
     // Note! you also need update pages/_document.tsx file
     // to import proper fontFamily
-    fontFamily: '"Open Sans", sans-serif',
+    fontFamily: 'SFMono-Regular, Menlo, Monaco,Consolas, "Liberation Mono","Courier New", monospace',
     // set default fontsize to 1rem (16px)
     fontSize:16,
     button:{
@@ -58,7 +61,6 @@ const rsdTheme = createTheme({
       lineHeight: 1.25,
     },
     h3: {
-      fontFamily: '"Open Sans", sans-serif',
       fontWeight: 400,
       fontSize: "1.5rem",
       lineHeight: 1.125,
