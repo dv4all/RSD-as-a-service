@@ -11,6 +11,6 @@ services:
     image: rsd/fe-next:0.0.1
     env_file:
       # configuration
-      - .env.production.local
+      - .env.local
     ports:
       - "3000:3000"

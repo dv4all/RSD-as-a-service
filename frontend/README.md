@@ -9,7 +9,14 @@ The team has experience in Vue and React. It can work with both frameworks. The 
 ## Development
 
 - intall dependencies `npm install`
+- create env.local file. Use env.local.example as template
 - run in dev mode `npm run dev` or `yarn dev`
+
+### Environment variables
+
+For oAuth implementation we need number of env variables.
+Copy env.local.example file to `env.local` and provide the values required by next-auth.
+Note! currently docker-compose also uses this env file to load variables in the docker image.
 
 ## Docker compose
 
