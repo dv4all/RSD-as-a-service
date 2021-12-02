@@ -8,7 +8,7 @@
  */
 
 import { createTheme } from "@mui/material/styles";
-import { blue, orange, red } from '@mui/material/colors'
+// import { blue, orange, red } from '@mui/material/colors'
 
 // define color variables to use
 const colorPrimary = '#00A3E3'
@@ -17,8 +17,6 @@ const colorTextPrimary = 'rgba(34,36,37,1)'
 const colorTextSecondary = 'rgba(34,36,37,0.87)'
 const colorTextDisabled = 'rgba(34,36,37,0.45)'
 const colorDivider = '#DDD'
-const colorBase100 = '#FFF'
-const colorBase200 = '#EEE'
 
 const rsdTheme = createTheme({
   palette: {
@@ -42,7 +40,9 @@ const rsdTheme = createTheme({
     // change default fonts to OpenSans
     // Note! you also need update pages/_document.tsx file
     // to import proper fontFamily
-    fontFamily: 'SFMono-Regular, Menlo, Monaco,Consolas, "Liberation Mono","Courier New", monospace',
+    // fontFamily: 'SFMono-Regular, Menlo, Monaco,Consolas, "Liberation Mono","Courier New", monospace',
+    // legacy RSD use these fonts
+    fontFamily: '"Roboto",Helvetica,arial,sans-serif',
     // set default fontsize to 1rem (16px)
     fontSize:16,
     button:{

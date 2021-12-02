@@ -12,16 +12,10 @@ export default class MyDocument extends Document {
           {/* PWA primary color */}
           <meta name="theme-color" content={rsdTheme.palette.primary.main} />
           {/* Roboto fonts */}
-          {/* <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          /> */}
-          {/* Nunito fonts */}
-          {/* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,800&display=swap" /> */}
-          {/* Open Sans */}
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700&display=swap" />
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
         </Head>
         <body>
           <Main />
