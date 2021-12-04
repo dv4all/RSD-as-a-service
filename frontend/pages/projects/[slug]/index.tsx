@@ -1,4 +1,4 @@
-import DefaultLayout from "../../../layout/DefaultLayout"
+import DefaultLayout from "../../../layouts/DefaultLayout"
 
 export default function ProjectItemPage() {
   return (

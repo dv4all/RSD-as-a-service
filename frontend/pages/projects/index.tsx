@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { AppContext } from 'next/app'
-import DefaultLayout from "../../layout/DefaultLayout"
+import DefaultLayout from "../../layouts/DefaultLayout"
 import PageTitle from '../../components/PageTitle'
 import TablePagination from '../../components/TablePagination'
 

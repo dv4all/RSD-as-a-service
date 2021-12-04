@@ -4,7 +4,7 @@ import { NextPageContext } from 'next'
 
 import TablePagination from '@mui/material/TablePagination';
 
-import DefaultLayout from "../../layout/DefaultLayout"
+import DefaultLayout from "../../layouts/DefaultLayout"
 import PageTitle from '../../components/PageTitle'
 // import TablePagination from '../../components/TablePagination'
 
@@ -20,7 +20,6 @@ export default function SoftwareIndexPage({software}:{software:SoftwareItem[]}) 
   const rowsPerPageOptions = [12,24,48]
 
   useEffect(()=>{
-    // debugger
     getSoftwareList({
       limit:rowsPerPage,
       offset: rowsPerPage * page

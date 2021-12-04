@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react"
-import DefaultLayout from "../../layout/DefaultLayout"
+import DefaultLayout from "../../layouts/DefaultLayout"
 
 export default function UserProfilePage() {
   const {data, status} = useSession()

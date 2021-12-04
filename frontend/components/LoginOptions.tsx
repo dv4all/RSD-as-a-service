@@ -2,10 +2,8 @@ import {signIn} from 'next-auth/react'
 import router from 'next/router'
 
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import GitHubIcon from '@mui/icons-material/GitHub';
-import GitLabIcon from './GitlabIcon';
+import { Icon } from '@iconify/react'
 
 function signInWith(provider:string){
   signIn(provider,{
@@ -15,25 +13,14 @@ function signInWith(provider:string){
 
 export default function LoginOptions() {
   return (
-    <Box
-      component="section"
-      sx={{
-        display: 'grid',
-        gridGap: '1rem',
-        margin: 'auto',
-        width: '25rem'
-      }}
-    >
-      <Typography variant="h1">
-          Login with
-      </Typography>
+    <section className="grid gap-4 mx-auto mt-20 w-1/4">
+      <h2>Login with</h2>
       <Button
         variant="outlined"
         autoFocus
         sx={{textTransform:'inherit'}}
         onClick={()=>signInWith('github')}>
-        <GitHubIcon sx={{marginRight:'1rem'}}/>
-          GitHub
+        <Icon icon="mdi:github" width={20}  className="mr-1"/> GitHub
       </Button>
       {/*
         GITLAB SSO IS NOT WORKING! Further investigation needed
@@ -45,20 +32,20 @@ export default function LoginOptions() {
       */}
       <Button variant="outlined" sx={{textTransform:'inherit'}}
         onClick={()=>signInWith('orcid')}>
-        ORCID
+        <Icon icon="mdi:login-variant" width={20}  className="mr-1"/> ORCID
       </Button>
       <Button variant="outlined" sx={{textTransform:'inherit'}}
         onClick={()=>signInWith('surfconext')}>
-        SURFconext
+        <Icon icon="mdi:login-variant" width={20}  className="mr-1"/> SURFconext
       </Button>
       <Button variant="outlined" sx={{textTransform:'inherit'}}
         onClick={()=>signInWith('azure-ad')}>
-        Azure AD
+        <Icon icon="mdi:microsoft" width={20}  className="mr-1"/> Azure AD
       </Button>
       <Button variant="outlined" sx={{textTransform:'inherit'}}
         onClick={()=>router.push("/signin")}>
-        Email and Password
+        <Icon icon="mdi:email-outline" width={20}  className="mr-1"/> Email and Password
       </Button>
-    </Box>
+    </section>
   )
 }

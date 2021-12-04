@@ -48,6 +48,22 @@ const rsdTheme = createTheme({
       fontWeight: 600,
       letterSpacing: '0.125rem'
     },
+    // change headers fontSize and weight
+    h1: {
+      fontWeight: 400,
+      fontSize: "2rem",
+      lineHeight: 1.5,
+    },
+    h2: {
+      fontWeight: 400,
+      fontSize: "1.75rem",
+      lineHeight: 1.25,
+    },
+    h3: {
+      fontWeight: 400,
+      fontSize: "1.5rem",
+      lineHeight: 1.125,
+    },
   },
   // overriding defaults
   // in Mui components

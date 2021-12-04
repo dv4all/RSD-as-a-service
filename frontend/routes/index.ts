@@ -1,4 +1,6 @@
-
+/**
+ * Menu Items
+ */
 type AppRoute = {
   path:string,
   label:string

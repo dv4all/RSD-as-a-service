@@ -1,7 +1,5 @@
 import Head from 'next/head'
-
-import Typography from '@mui/material/Typography'
-import DefaultLayout from '../layout/DefaultLayout'
+import DefaultLayout from '../layouts/DefaultLayout'
 
 export default function Home(){
   return (
@@ -10,7 +8,7 @@ export default function Home(){
       <title>Home page | Research Software Directory</title>
     </Head>
     <DefaultLayout>
-      <Typography variant="h1">Home page</Typography>
+      <h1>Home page</h1>
     </DefaultLayout>
     </>
   )

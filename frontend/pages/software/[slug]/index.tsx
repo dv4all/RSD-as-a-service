@@ -1,7 +1,7 @@
 import {NextPageContext} from 'next'
 import Head from 'next/head'
 import {useRouter} from 'next/router'
-import DefaultLayout from "../../../layout/DefaultLayout"
+import DefaultLayout from "../../../layouts/DefaultLayout"
 import PageTitle from '../../../components/PageTitle'
 
 import IconButton from '@mui/material/IconButton'

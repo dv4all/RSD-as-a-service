@@ -1,7 +1,7 @@
 import type {NextPage} from 'next'
 import {signOut,useSession} from 'next-auth/react'
 import {useEffect} from 'react'
-import DefaultLayout from "../layout/DefaultLayout"
+import DefaultLayout from "../layouts/DefaultLayout"
 
 
 const LogoutPage: NextPage = () => {

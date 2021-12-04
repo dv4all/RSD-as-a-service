@@ -16,7 +16,6 @@ export default function TablePaginationDemo() {
   const handleChangeRowsPerPage = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    debugger 
     setRowsPerPage(parseInt(event.target.value));
     setPage(0);
   };

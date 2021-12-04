@@ -3,7 +3,7 @@ import { getProviders, getSession } from 'next-auth/react'
 
 import Head from 'next/head'
 import Typography from '@mui/material/Typography'
-import DefaultLayout from '../layout/DefaultLayout'
+import DefaultLayout from '../layouts/DefaultLayout'
 
 import LoginOptions from '../components/LoginOptions'
 

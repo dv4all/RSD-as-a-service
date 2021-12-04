@@ -1,6 +1,6 @@
 import router from 'next/router'
-import Logo from '../assets/logo-escience.svg'
 import { Icon } from '@iconify/react'
+import Logo from '../assets/logo-escience.svg'
 
 export default function AppFooter () {
   return (

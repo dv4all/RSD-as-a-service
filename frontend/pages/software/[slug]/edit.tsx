@@ -5,7 +5,7 @@ import { IconButton } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SaveIcon from '@mui/icons-material/Save'
 
-import DefaultLayout from "../../../layout/DefaultLayout"
+import DefaultLayout from "../../../layouts/DefaultLayout"
 import PageTitle from '../../../components/PageTitle'
 
 export default function SoftwareIndexPage() {
