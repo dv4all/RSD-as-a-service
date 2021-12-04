@@ -8,9 +8,9 @@
  */
 
 import { createTheme } from "@mui/material/styles";
-// import { blue, orange, red } from '@mui/material/colors'
 
 // define color variables to use
+// These variable need to match the css variables from global.css until mui supports css variables in the theme declaration
 const colorPrimary = '#00A3E3'
 const colorSecondary = '#222425'
 const colorTextPrimary = 'rgba(34,36,37,1)'
@@ -42,28 +42,11 @@ const rsdTheme = createTheme({
     // to import proper fontFamily
     // fontFamily: 'SFMono-Regular, Menlo, Monaco,Consolas, "Liberation Mono","Courier New", monospace',
     // legacy RSD use these fonts
-    fontFamily: '"Roboto",Helvetica,arial,sans-serif',
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','sans-serif'",
     // set default fontsize to 1rem (16px)
-    fontSize:16,
     button:{
       fontWeight: 600,
       letterSpacing: '0.125rem'
-    },
-    // change headers fontSize and weight
-    h1: {
-      fontWeight: 400,
-      fontSize: "2rem",
-      lineHeight: 1.5,
-    },
-    h2: {
-      fontWeight: 400,
-      fontSize: "1.75rem",
-      lineHeight: 1.25,
-    },
-    h3: {
-      fontWeight: 400,
-      fontSize: "1.5rem",
-      lineHeight: 1.125,
     },
   },
   // overriding defaults
