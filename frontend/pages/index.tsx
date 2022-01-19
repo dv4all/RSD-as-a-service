@@ -12,6 +12,7 @@ export default function Home(){
       <DefaultLayout>
         <h1>Home page</h1>
         <p>Added paragraph to test github actions on release branch</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, eligendi, magnam eaque quas necessitatibus in eius suscipit numquam dolorem cumque nulla recusandae debitis, deserunt ipsam distinctio quaerat illum. Provident, quos.</p>
       </DefaultLayout>
     </>
   )
