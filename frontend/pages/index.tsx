@@ -11,6 +11,7 @@ export default function Home(){
       </Head>
       <DefaultLayout>
         <h1>Home page</h1>
+        <p>Added paragraph to test github actions on release branch</p>
       </DefaultLayout>
     </>
   )
