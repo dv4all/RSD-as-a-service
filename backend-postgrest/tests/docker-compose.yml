@@ -56,7 +56,7 @@ services:
       - net-test
 
 # define name for docker network
-# it should have name: rsd-as-a-service_net
+# it should have name: rsd-as-a-service_net-test
 networks:
   net-test:
 
