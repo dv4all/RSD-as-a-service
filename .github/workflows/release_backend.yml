@@ -50,8 +50,8 @@ jobs:
       - name: "push images to ghcr"
         run: |
           echo push database image with all tags
-          docker push ghcr.io/research-software-directory/rsd-saas/database
+          docker push ghcr.io/research-software-directory/rsd-saas/database --all-tags
           echo backend image with all tags
-          docker push ghcr.io/research-software-directory/rsd-saas/backend
+          docker push ghcr.io/research-software-directory/rsd-saas/backend --all-tags
 
 
