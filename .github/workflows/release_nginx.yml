@@ -18,13 +18,11 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@master
         with:
           path: deployment
-      - name: "show version number"
-        run: echo build rsd-saas/nginx:${{steps.package-version.outputs.current-version}}
       - name: "build the nginx docker image"
         run: |
           IMAGE_TAG=ghcr.io/research-software-directory/rsd/nginx
           echo image_tag $IMAGE_TAG
-          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd/nginx:${{steps.package-version.outputs.current-version}}
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd/nginx:${{steps.package-version-rsd.outputs.current-version}}
           echo image_tag_rsd $IMAGE_TAG_RSD
           docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f nginx/Dockerfile ./nginx
       - name: "login to ghcr"
