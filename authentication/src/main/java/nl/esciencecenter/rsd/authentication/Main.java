@@ -50,7 +50,7 @@ public class Main {
 				JwtCreator jwtCreator = new JwtCreator(CONFIG.getProperty("PGRST_JWT_SECRET"));
 				String token = jwtCreator.createUserJwt(account);
 				setJwtCookie(ctx, token);
-				// redirect based on info
+				// redirect based on returnPath
 				if (returnPath != null && !returnPath.trim().isEmpty()) {
 					returnPath = returnPath.trim();
 					ctx.redirect(returnPath);
