@@ -1,6 +1,6 @@
 {
   "name": "rsd-saas",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha",
   "private": true,
   "scripts": {
     "start": "echo not a node app"
