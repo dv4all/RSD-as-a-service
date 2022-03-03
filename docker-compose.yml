@@ -7,13 +7,9 @@ services:
     image: rsd/database:0.0.11
     ports:
     # enable connection from outside
-      - "5432:5432"
-    # expose:
-    #   - 5432
-    environment:
-      POSTGRES_DB: "rsd-db"
-      POSTGRES_USER: "rsd"
-      POSTGRES_PASSWORD: "securepassword"
+     - "5432:5432"
+    env_file:
+      - .env.production
     volumes:
       # persist data in named docker volume
       # to remove use: docker-compose down --volumes
@@ -26,17 +22,10 @@ services:
     container_name: backend
     build: ./backend-postgrest
     image: rsd/backend-postgrest:0.0.1
-    # ports:
-    #   - "3500:3500"
     expose:
       - 3500
-    environment:
-      PGRST_DB_URI: "postgres://authenticator:simplepassword@database:5432/rsd-db"
-      PGRST_DB_ANON_ROLE: "web_anon"
-      PGRST_DB_SCHEMA: "public"
-      PGRST_SERVER_PORT: "3500"
     env_file:
-      - ./frontend/.env.production.local
+      - .env.production
     depends_on:
       - "database"
     networks:
@@ -48,12 +37,13 @@ services:
       context: .
       dockerfile: ./authentication/dockerfile
     image: rsd/auth:0.0.5
-    # ports:
-    #   - "7000:7000"
     expose:
       - 7000
-    environment:
-      PROPERTIES: "/usr/mymaven/.env.production.local"
+    # NOTE! update to use env_file
+    # environment:
+    #   PROPERTIES: "/usr/mymaven/.env.production"
+    env_file:
+      - .env.production
     depends_on:
       - "database"
       - "backend"
@@ -69,9 +59,7 @@ services:
     # update version number to corespond to frontend/package.json
     image: rsd/frontend:0.5.8
     env_file:
-      - ./frontend/.env.production.local
-    # ports:
-    #   - "3000:3000"
+      - .env.production
     expose:
       - 3000
     depends_on:
@@ -102,7 +90,7 @@ services:
     build: ./scrapers
     image: rsd/scrapers:0.0.3
     env_file:
-      - ./frontend/.env.production.local
+      - .env.production
     depends_on:
       - "database"
       - "backend"
