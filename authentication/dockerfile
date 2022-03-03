@@ -4,7 +4,6 @@ RUN mkdir --parents ./src/main
 COPY authentication/pom.xml .
 RUN mvn clean package -Dmaven.main.skip -Dmaven.test.skip && rm -r ./target && mvn exec:java --fail-never
 COPY authentication/src/main ./src/main
-# do not copy env file
-# COPY frontend/.env.production.local .
+COPY frontend/.env.production.local .
 RUN mvn compile
 CMD mvn exec:java -Dexec.args=$PROPERTIES

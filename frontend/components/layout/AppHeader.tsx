@@ -30,6 +30,7 @@ export default function AppHeader({editButton}:{editButton?:JSX.Element}){
 
   async function redirectToSurf(){
     const url = await getRedirectUrl('surfconext')
+    console.log('redirectToSurf...',url)
     debugger
     if (url){
       window.location.href = url
