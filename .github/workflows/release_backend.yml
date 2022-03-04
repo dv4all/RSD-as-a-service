@@ -38,11 +38,11 @@ jobs:
           IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/database:${{steps.package-version-rsd.outputs.current-version}}
           echo image_tag_rsd $IMAGE_TAG_RSD
           docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f database/dockerfile ./database
-      - name: "build rsd-saas/postgrest image"
+      - name: "build rsd-saas/backend image"
         run: |
           IMAGE_TAG=ghcr.io/research-software-directory/rsd-saas/backend
           echo image_tag $IMAGE_TAG
-          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/database:${{steps.package-version-rsd.outputs.current-version}}
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/backend:${{steps.package-version-rsd.outputs.current-version}}
           echo image_tag_rsd $IMAGE_TAG_RSD
           docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f backend-postgrest/dockerfile .
       - name: "login to ghcr"
