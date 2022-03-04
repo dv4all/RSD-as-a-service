@@ -35,7 +35,7 @@ services:
       - PGRST_SERVER_PORT
       - PGRST_JWT_SECRET
     depends_on:
-      - "database"
+      - database
     networks:
       - net
 
@@ -59,8 +59,8 @@ services:
       - AUTH_SURFCONEXT_CLIENT_SECRET
       - PGRST_JWT_SECRET
     depends_on:
-      - "database"
-      - "backend"
+      - database
+      - backend
     networks:
       - net
 
@@ -76,16 +76,16 @@ services:
       # it uses values from .env file
       - POSTGREST_URL
       - RSD_AUTH_URL
+      - PGRST_JWT_SECRET
       - NEXT_PUBLIC_SURFCONEXT_CLIENT_ID
       - NEXT_PUBLIC_SURFCONEXT_REDIRECT
       - NEXT_PUBLIC_SURFCONEXT_WELL_KNOWN_URL
-      - PGRST_JWT_SECRET
     expose:
       - 3000
     depends_on:
-      - "database"
-      - "backend"
-      - "auth"
+      - database
+      - backend
+      - auth
     networks:
       - net
   scrapers:
@@ -100,8 +100,8 @@ services:
       - API_CREDENTIALS_GITHUB
       - ZENODO_ACCESS_TOKEN
     depends_on:
-      - "database"
-      - "backend"
+      - database
+      - backend
     networks:
       - net
   nginx:
@@ -113,10 +113,10 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - "database"
-      - "backend"
-      - "auth"
-      - "frontend"
+      - database
+      - backend
+      - auth
+      - frontend
     networks:
       - net
 

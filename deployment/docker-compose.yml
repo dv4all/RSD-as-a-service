@@ -4,7 +4,7 @@ version: "3.0"
 services:
   database:
     container_name: database
-    image: ghcr.io/research-software-directory/rsd-saas/database:0.3.6
+    image: ghcr.io/research-software-directory/rsd-saas/database:1.0.0-alpha
     expose:
       - 5432
     environment:
@@ -21,7 +21,7 @@ services:
 
   backend:
     container_name: backend
-    image: ghcr.io/research-software-directory/rsd-saas/backend:0.3.6
+    image: ghcr.io/research-software-directory/rsd-saas/backend:1.0.0-alpha
     expose:
       - 3500
     environment:
@@ -38,11 +38,17 @@ services:
 
   auth:
     container_name: auth
-    image: ghcr.io/research-software-directory/rsd-saas/auth:0.3.6
+    image: ghcr.io/research-software-directory/rsd-saas/auth:1.0.0-alpha
     expose:
       - 7000
     environment:
-      PROPERTIES: "/usr/mymaven/.env.production.local"
+      # it uses values from .env file
+      - POSTGREST_URL
+      - NEXT_PUBLIC_SURFCONEXT_CLIENT_ID
+      - NEXT_PUBLIC_SURFCONEXT_REDIRECT
+      - NEXT_PUBLIC_SURFCONEXT_WELL_KNOWN_URL
+      - AUTH_SURFCONEXT_CLIENT_SECRET
+      - PGRST_JWT_SECRET
     volumes:
       - .env:/usr/mymaven/.env.production.local
     depends_on:
@@ -53,7 +59,7 @@ services:
 
   frontend:
     container_name: frontend
-    image: ghcr.io/research-software-directory/rsd-saas/frontend:0.3.6
+    image: ghcr.io/research-software-directory/rsd-saas/frontend:1.0.0-alpha
     environment:
       - POSTGREST_URL
       - RSD_AUTH_URL
@@ -70,9 +76,24 @@ services:
     networks:
       - net
 
+  scrapers:
+    container_name: scrapers
+    image: ghcr.io/research-software-directory/rsd-saas/scrapers:1.0.0-alpha
+    environment:
+      # it uses values from .env file
+      - POSTGREST_URL
+      - PGRST_JWT_SECRET
+      - MAX_REQUESTS_GITHUB
+      - API_CREDENTIALS_GITHUB
+      - ZENODO_ACCESS_TOKEN
+    depends_on:
+      - database
+      - backend
+    networks:
+      - net
   nginx:
     container_name: nginx
-    image: ghcr.io/research-software-directory/rsd-saas/nginx:0.3.6
+    image: ghcr.io/research-software-directory/rsd-saas/nginx:1.0.0-alpha
     ports:
       - "80:80"
       - "443:443"
@@ -83,19 +104,6 @@ services:
       - frontend
     networks:
       - net
-
-  scrapers:
-    container_name: scrapers
-    build: ./scrapers
-    image: rsd/scrapers:0.0.3
-    env_file:
-      - .env.production
-    depends_on:
-      - "database"
-      - "backend"
-    networks:
-      - net
-
 
 # define name for docker network
 # it should have name: rsd-as-a-service_net
