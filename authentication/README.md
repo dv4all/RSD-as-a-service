@@ -7,7 +7,6 @@ This modules handles authentication from third parties using oAuth2 and OpenID.
 It requires the following variables at run time.
 
 ```env
-
 # connection to backend
 POSTGREST_URL=
 
@@ -18,5 +17,4 @@ AUTH_SURFCONEXT_CLIENT_SECRET=
 
 # JWT secret for postgREST
 PGRST_JWT_SECRET=
-
 ```

@@ -4,7 +4,7 @@ version: "3.0"
 services:
   database:
     container_name: database
-    image: ghcr.io/research-software-directory/rsd-saas/database:1.0.0-alpha
+    image: ghcr.io/research-software-directory/rsd-saas/database:1.0.1-alpha
     expose:
       - 5432
     environment:
@@ -21,7 +21,7 @@ services:
 
   backend:
     container_name: backend
-    image: ghcr.io/research-software-directory/rsd-saas/backend:1.0.0-alpha
+    image: ghcr.io/research-software-directory/rsd-saas/backend:1.0.1-alpha
     expose:
       - 3500
     environment:
@@ -49,8 +49,6 @@ services:
       - NEXT_PUBLIC_SURFCONEXT_WELL_KNOWN_URL
       - AUTH_SURFCONEXT_CLIENT_SECRET
       - PGRST_JWT_SECRET
-    volumes:
-      - .env:/usr/mymaven/.env.production.local
     depends_on:
       - database
       - backend
