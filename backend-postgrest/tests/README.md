@@ -13,7 +13,6 @@ In order to use the collection on Postman, you need to set two (global) variable
 
 ```bash
 docker-compose build
-
 ```
 
 ## Run test locally
