@@ -6,10 +6,13 @@ services:
     build: ./database
     image: rsd/database:0.0.11
     ports:
-    # enable connection from outside
+    # enable connection from outside (development mode)
      - "5432:5432"
-    env_file:
-      - .env.production
+    environment:
+      # it uses values from .env file
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     volumes:
       # persist data in named docker volume
       # to remove use: docker-compose down --volumes
@@ -24,8 +27,13 @@ services:
     image: rsd/backend-postgrest:0.0.1
     expose:
       - 3500
-    env_file:
-      - .env.production
+    environment:
+      # it needs to be here to use values from .env file
+      - PGRST_DB_URI=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/rsd-db
+      - PGRST_DB_ANON_ROLE
+      - PGRST_DB_SCHEMA
+      - PGRST_SERVER_PORT
+      - PGRST_JWT_SECRET
     depends_on:
       - "database"
     networks:
@@ -42,8 +50,14 @@ services:
     # NOTE! update to use env_file
     # environment:
     #   PROPERTIES: "/usr/mymaven/.env.production"
-    env_file:
-      - .env.production
+    environment:
+      # it uses values from .env file
+      - POSTGREST_URL
+      - NEXT_PUBLIC_SURFCONEXT_CLIENT_ID
+      - NEXT_PUBLIC_SURFCONEXT_REDIRECT
+      - NEXT_PUBLIC_SURFCONEXT_WELL_KNOWN_URL
+      - AUTH_SURFCONEXT_CLIENT_SECRET
+      - PGRST_JWT_SECRET
     depends_on:
       - "database"
       - "backend"
@@ -58,8 +72,14 @@ services:
       dockerfile: Dockerfile
     # update version number to corespond to frontend/package.json
     image: rsd/frontend:0.5.8
-    env_file:
-      - .env.production
+    environment:
+      # it uses values from .env file
+      - POSTGREST_URL
+      - RSD_AUTH_URL
+      - NEXT_PUBLIC_SURFCONEXT_CLIENT_ID
+      - NEXT_PUBLIC_SURFCONEXT_REDIRECT
+      - NEXT_PUBLIC_SURFCONEXT_WELL_KNOWN_URL
+      - PGRST_JWT_SECRET
     expose:
       - 3000
     depends_on:
@@ -89,8 +109,13 @@ services:
     container_name: scrapers
     build: ./scrapers
     image: rsd/scrapers:0.0.3
-    env_file:
-      - .env.production
+    environment:
+      # it uses values from .env file
+      - POSTGREST_URL
+      - PGRST_JWT_SECRET
+      - MAX_REQUESTS_GITHUB
+      - API_CREDENTIALS_GITHUB
+      - ZENODO_ACCESS_TOKEN
     depends_on:
       - "database"
       - "backend"
