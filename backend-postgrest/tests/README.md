@@ -23,6 +23,6 @@ From the backend-postgrest directory run the following docker-compose command. I
 # run test and clean up the containers on exit
 docker-compose up \
   --abort-on-container-exit \
-  --exit-code-from postgrest-test \
+  --exit-code-from postgrest-tests \
   && docker-compose down --volumes
 ```
