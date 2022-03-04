@@ -1,5 +1,5 @@
 
-name: docker build nginx
+name: docker build scrapers
 
 on:
   push:
