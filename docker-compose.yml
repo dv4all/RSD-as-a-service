@@ -47,9 +47,6 @@ services:
     image: rsd/auth:0.0.5
     expose:
       - 7000
-    # NOTE! update to use env_file
-    # environment:
-    #   PROPERTIES: "/usr/mymaven/.env.production"
     environment:
       # it uses values from .env file
       - POSTGREST_URL
