@@ -7,6 +7,7 @@ This modules handles authentication from third parties using oAuth2 and OpenID.
 It requires the following variables at run time.
 
 ```env
+
 # connection to backend
 POSTGREST_URL=
 
