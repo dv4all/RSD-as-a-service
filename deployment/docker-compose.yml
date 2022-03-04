@@ -38,7 +38,7 @@ services:
 
   auth:
     container_name: auth
-    image: ghcr.io/research-software-directory/rsd-saas/auth:1.0.0-alpha
+    image: ghcr.io/research-software-directory/rsd-saas/auth:1.0.1-alpha
     expose:
       - 7000
     environment:
@@ -57,7 +57,7 @@ services:
 
   frontend:
     container_name: frontend
-    image: ghcr.io/research-software-directory/rsd-saas/frontend:1.0.0-alpha
+    image: ghcr.io/research-software-directory/rsd-saas/frontend:1.0.1-alpha
     environment:
       - POSTGREST_URL
       - RSD_AUTH_URL
@@ -91,7 +91,7 @@ services:
       - net
   nginx:
     container_name: nginx
-    image: ghcr.io/research-software-directory/rsd-saas/nginx:1.0.0-alpha
+    image: ghcr.io/research-software-directory/rsd-saas/nginx:latest
     ports:
       - "80:80"
       - "443:443"
