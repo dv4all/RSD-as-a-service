@@ -41,9 +41,7 @@ services:
 
   auth:
     container_name: auth
-    build:
-      context: .
-      dockerfile: ./authentication/dockerfile
+    build: ./authentication
     image: rsd/auth:0.0.5
     expose:
       - 7000
@@ -85,6 +83,7 @@ services:
       - auth
     networks:
       - net
+
   scrapers:
     container_name: scrapers
     build: ./scrapers
@@ -101,6 +100,7 @@ services:
       - backend
     networks:
       - net
+
   nginx:
     container_name: nginx
     build:
