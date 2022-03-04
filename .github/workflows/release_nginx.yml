@@ -24,7 +24,7 @@ jobs:
           echo image_tag $IMAGE_TAG
           IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/nginx:${{steps.package-version-rsd.outputs.current-version}}
           echo image_tag_rsd $IMAGE_TAG_RSD
-          docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f nginx/Dockerfile ./nginx
+          docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f nginx/dockerfile ./nginx
       - name: "login to ghcr"
         run: echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
       - name: "push image to ghcr"
