@@ -88,23 +88,6 @@ services:
       - "auth"
     networks:
       - net
-
-  nginx:
-    container_name: nginx
-    build:
-      context: ./nginx
-    image: rsd/nginx:0.0.2
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - "database"
-      - "backend"
-      - "auth"
-      - "frontend"
-    networks:
-      - net
-
   scrapers:
     container_name: scrapers
     build: ./scrapers
@@ -119,6 +102,21 @@ services:
     depends_on:
       - "database"
       - "backend"
+    networks:
+      - net
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    image: rsd/nginx:0.0.2
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - "database"
+      - "backend"
+      - "auth"
+      - "frontend"
     networks:
       - net
 
