@@ -1,0 +1,69 @@
+name: release all modules
+
+on:
+  push:
+   branches:
+      - release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+
+      - name: conventional changelog
+        id: changelog
+        # https://github.com/TriPSs/conventional-changelog-action
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          # you can also create separate token to trace action
+          github-token: "${{secrets.GITHUB_TOKEN}}"
+          # use shared package.json in deployment folder
+          version-file: "./deployment/package.json"
+          # do not create changelog file, the content in used in relase body only
+          output-file: false
+          # do not create additional commit, just tag current commit with the version
+          skip-commit: true
+
+      - name: "build and push auth image"
+        run: |
+          IMAGE_TAG=ghcr.io/research-software-directory/rsd-saas/auth
+          echo image_tag $IMAGE_TAG
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/auth:${{steps.changelog.outputs.tag}}
+          echo image_tag_rsd $IMAGE_TAG_RSD
+          docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f authentication/dockerfile ./authentication
+          echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
+          echo push auth image with all tags
+          docker push ghcr.io/research-software-directory/rsd-saas/auth --all-tags
+
+      - name: "build and push frontend image"
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
+        run: |
+          IMAGE_TAG=ghcr.io/research-software-directory/rsd-saas/frontend
+          echo image_tag $IMAGE_TAG
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/frontend:${{steps.changelog.outputs.tag}}
+          echo image_tag_rsd $IMAGE_TAG_RSD
+          docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f frontend/Dockerfile ./frontend
+          echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
+          echo push frontend image with all tags
+          docker push ghcr.io/research-software-directory/rsd-saas/frontend --all-tags
+
+      - name: create release
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
+        # https://github.com/softprops/action-gh-release
+        uses: softprops/action-gh-release@v1
+        env:
+          # token is provided by Actions, you don't need to create your own token but you could
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{steps.changelog.outputs.clean_changelog}}
+          draft: false
+          prerelease: true
+          files: |
+            LICENSE
+            ./deployment/docker-compose.yml
+            ./deployment/README.md
+

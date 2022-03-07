@@ -4,7 +4,7 @@ name: docker build scrapers
 on:
   push:
     branches:
-      - release
+      - scrapers
     paths:
       - "scrapers/**"
   workflow_dispatch:

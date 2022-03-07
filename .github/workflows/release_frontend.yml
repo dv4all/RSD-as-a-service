@@ -4,12 +4,12 @@ name: docker build frontend
 on:
   push:
     branches:
-      - release
+      - frontend
     paths:
       - "frontend/**"
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,16 +18,21 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@master
         with:
           path: frontend
-      - name: "get-npm-version-rsd"
-        id: package-version-rsd
-        uses: martinbeentjes/npm-get-version-action@master
+      - name: conventional changelog
+        id: changelog
+        # https://github.com/TriPSs/conventional-changelog-action
+        uses: TriPSs/conventional-changelog-action@latest
         with:
-          path: deployment
+          # you can also create separate token to trace action
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          version-file: "./deployment/package.json"
+
       - name: "build frontend image"
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
         run: |
           IMAGE_TAG=ghcr.io/research-software-directory/rsd-saas/frontend
           echo image_tag $IMAGE_TAG
-          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/frontend:${{steps.package-version-rsd.outputs.current-version}}
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/frontend:${{steps.changelog.outputs.tag}}
           echo image_tag_rsd $IMAGE_TAG_RSD
           IMAGE_TAG_FE=ghcr.io/research-software-directory/rsd-saas/frontend:${{steps.package-version-frontend.outputs.current-version}}
           echo image_tag_fe $IMAGE_TAG_FE
@@ -39,4 +44,5 @@ jobs:
           echo push frontend image with all tags
           docker push ghcr.io/research-software-directory/rsd-saas/frontend --all-tags
 
+      
 

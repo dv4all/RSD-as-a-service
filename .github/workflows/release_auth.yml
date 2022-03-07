@@ -4,7 +4,7 @@ name: docker build auth
 on:
   push:
     branches:
-      - release
+      - auth
     paths:
       - "authentication/**"
 

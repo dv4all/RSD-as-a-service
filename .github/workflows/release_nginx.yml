@@ -4,7 +4,7 @@ name: docker build nginx
 on:
   push:
     branches:
-      - release
+      - nginx
     paths:
       - "nginx/**"
 
