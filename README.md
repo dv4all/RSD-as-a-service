@@ -12,7 +12,7 @@ The program can easily be built with `docker-compose`. Each service builds the i
 
 ### Environment variables
 
-The environment variables should be stored in .env file, which automatically loaded by docker-compose. To validate which env variables are loaded you can use `docker-compose config`. More info about enviroment variables in docker-compose is available at [official docs pages](https://docs.docker.com/compose/environment-variables/)
+The environment variables should be stored in .env file, which is automatically loaded by docker-compose. To validate loading of env variables use `docker-compose config`. More info about use of enviroment variables in docker-compose is available at [official documentation](https://docs.docker.com/compose/environment-variables/)
 
 - copy the file `.env.example` to `.env` file at the root of the project
 
@@ -42,7 +42,7 @@ The application can be viewed on http://localhost
 
 ### Frontend with hot-module-replacement (HMR)
 
-To run frontend in the development mode with the hot-module-replacement (HMR) you need to start another instance of frontend
+To run frontend in the development mode with the hot-module-replacement (HMR) you should start additional instance of the frontend which will be available at http://localhost:3000
 
 ```bash
 # navigate to frontend folder
