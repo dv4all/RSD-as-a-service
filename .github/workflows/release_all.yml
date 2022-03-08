@@ -9,14 +9,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: checkout release branch with all history
         # https://github.com/actions/checkout
         uses: actions/checkout@v3
         with:
           # checkout whole history of release branch
           fetch-depth: 0
 
-      - name: conventional changelog
+      - name: calculate new version and create changelog content
         id: changelog
         # https://github.com/TriPSs/conventional-changelog-action
         uses: TriPSs/conventional-changelog-action@v3
@@ -110,6 +110,7 @@ jobs:
           cat ./deployment/docker-compose.yml
 
       - name: update CITATION.cff with version and release date
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
         # use doublequotes in second replace "" to enable variable substitution with bash
         run: |
           echo replace version line
