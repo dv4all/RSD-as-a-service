@@ -2,15 +2,19 @@ name: release all modules
 
 on:
   push:
-   branches:
+    branches:
       - release
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
+      - name: checkout
+        # https://github.com/actions/checkout
+        uses: actions/checkout@v3
+        with:
+          # checkout whole history of release branch
+          fetch-depth: 0
 
       - name: conventional changelog
         id: changelog
@@ -19,14 +23,12 @@ jobs:
         with:
           # you can also create separate token to trace action
           github-token: "${{secrets.GITHUB_TOKEN}}"
-          # use shared package.json in deployment folder
-          version-file: "./deployment/package.json"
-          # do not create changelog file, the content in used in relase body only
+          # do not create changelog file, the content is used at next step for relase body
           output-file: false
           # do not create additional commit, just tag current commit with the version
           skip-commit: true
-          # to skip tagging all together
-          # git-push: false
+          # do not pull - we already checked out the selection we want to use for versioning
+          skip-git-pull: true
 
       - name: auth image (build and push)
         if: ${{steps.changelog.outputs.skipped == 'false'}}
@@ -81,7 +83,7 @@ jobs:
         run: |
           IMAGE_TAG=ghcr.io/research-software-directory/rsd-saas/nginx
           echo image_tag $IMAGE_TAG
-          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/nginx:${{steps.package-version-rsd.outputs.current-version}}
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/nginx:${{steps.changelog.outputs.tag}}
           echo image_tag_rsd $IMAGE_TAG_RSD
           docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f nginx/dockerfile ./nginx
           echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
@@ -93,28 +95,52 @@ jobs:
         run: |
           IMAGE_TAG=ghcr.io/research-software-directory/rsd-saas/scrapers
           echo image_tag $IMAGE_TAG
-          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/scrapers:${{steps.package-version-rsd.outputs.current-version}}
+          IMAGE_TAG_RSD=ghcr.io/research-software-directory/rsd-saas/scrapers:${{steps.changelog.outputs.tag}}
           echo image_tag_rsd $IMAGE_TAG_RSD
           docker build -t $IMAGE_TAG_RSD -t $IMAGE_TAG -f scrapers/dockerfile ./scrapers
           echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
           echo push scrapers image with all tags
           docker push ghcr.io/research-software-directory/rsd-saas/scrapers --all-tags
 
+      - name: update version in docker-compose.yml
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
+        run: |
+          echo replace :latest tag with ${{steps.changelog.outputs.tag}}
+          sed -i -e 's/:latest/:${{steps.changelog.outputs.tag}}/g' ./deployment/docker-compose.yml
+          cat ./deployment/docker-compose.yml
+
+      - name: update CITATION.cff with version and release date
+        # use doublequotes in second replace "" to enable variable substitution with bash
+        run: |
+          echo replace version line
+          sed -i -e 's/version:.*/version: ${{steps.changelog.outputs.tag}}/' CITATION.cff
+          echo replace date
+          sed -i -e "s/date-released:.*/date-released: '$(date +%F)'/" CITATION.cff
+          cat CITATION.cff
+
+      - name: zip deployment files
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
+        run: |
+          zip deployment.zip \
+            ./deployment/docker-compose.yml \
+            ./deployment/.env.example \
+            ./deployment/README.md \
+            CITATION.cff \
+            LICENSE
+
       - name: create release
         if: ${{steps.changelog.outputs.skipped == 'false'}}
         # https://github.com/softprops/action-gh-release
         uses: softprops/action-gh-release@v1
         env:
-          # token is provided by Actions, you don't need to create your own token but you could
+          # The token is provided by Actions, you do not need to create your own token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
           name: ${{ steps.changelog.outputs.tag }}
           body: ${{steps.changelog.outputs.clean_changelog}}
-          draft: false
-          prerelease: true
-          files: |
-            LICENSE
-            ./deployment/docker-compose.yml
-            ./deployment/README.md
+          draft: true
+          prerelease: false
+          files: deployment.zip
+
 
