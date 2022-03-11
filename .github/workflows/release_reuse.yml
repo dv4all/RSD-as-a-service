@@ -1,4 +1,4 @@
-name: create release draft (manual)
+name: build and release (manual)
 
 on:
   workflow_dispatch:
@@ -61,7 +61,7 @@ jobs:
       dockerfile: database/dockerfile
       docker_context: ./database
     secrets:
-      token: ${{secrets.GITHUB_TOKEN}}            
+      token: ${{secrets.GITHUB_TOKEN}}
 
       # - name: backend image (build and push)
       #   if: ${{steps.changelog.outputs.skipped == 'false'}}
@@ -110,53 +110,88 @@ jobs:
       #     echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
       #     echo push scrapers image with all tags
       #     docker push ghcr.io/research-software-directory/rsd-saas/scrapers --all-tags
+  deployment_files:
+    name: create deployment.zip
+    if: needs.release_tag.outputs.skipped == false
+    needs: [release_tag,auth,database]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout main branch
+        # https://github.com/actions/checkout
+        uses: actions/checkout@v3
+        with:
+          # checkout whole history of main branch
+          ref: main
 
-      # - name: update version in docker-compose.yml
-      #   if: ${{steps.changelog.outputs.skipped == 'false'}}
-      #   run: |
-      #     echo replace :latest tag with ${{steps.changelog.outputs.tag}}
-      #     sed -i -e 's/:latest/:${{steps.changelog.outputs.tag}}/g' ./deployment/docker-compose.yml
-      #     cat ./deployment/docker-compose.yml
+      - name: update docker-compose.yml
+        run: |
+          echo replace :latest tag with ${{needs.release_tag.outputs.tag}}
+          sed -i -e 's/:latest/:${{needs.release_tag.outputs.tag}}/g' ./deployment/docker-compose.yml
+          cat ./deployment/docker-compose.yml
 
-      # - name: update CITATION.cff with version and release date
-      #   if: ${{steps.changelog.outputs.skipped == 'false'}}
-      #   # use doublequotes in second replace "" to enable variable substitution with bash
-      #   run: |
-      #     echo replace version line
-      #     sed -i -e 's/^version:.*/version: ${{steps.changelog.outputs.tag}}/' CITATION.cff
-      #     echo replace date
-      #     sed -i -e "s/^date-released:.*/date-released: '$(date +%F)'/" CITATION.cff
-      #     cat CITATION.cff
+      - name: update CITATION.cff
+        # use doublequotes in second replace "" to enable variable substitution with bash
+        run: |
+          echo replace version line
+          sed -i -e 's/^version:.*/version: ${{needs.release_tag.outputs.tag}}/' CITATION.cff
+          echo replace date
+          sed -i -e "s/^date-released:.*/date-released: '$(date +%F)'/" CITATION.cff
+          cat CITATION.cff
 
-      # - name: zip deployment files
-      #   if: ${{steps.changelog.outputs.skipped == 'false'}}
-      #   run: |
-      #     zip deployment.zip \
-      #       ./deployment/docker-compose.yml \
-      #       ./deployment/.env.example \
-      #       ./deployment/README.md \
-      #       CITATION.cff \
-      #       LICENSE
+      - name: zip deployment files
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
+        run: |
+          zip deployment.zip \
+            ./deployment/docker-compose.yml \
+            ./deployment/.env.example \
+            ./deployment/README.md \
+            CITATION.cff \
+            LICENSE
 
-      # - name: commit CITATION.cff
-      #   if: ${{steps.changelog.outputs.skipped == 'false'}}
-      #   # https://github.com/stefanzweifel/git-auto-commit-action
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: "release: update citation file"
-      #     file_pattern: CITATION.cff
+      - name: Upload deployment.zip
+        # https://github.com/actions/upload-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment
+          path: deployment.zip
 
-      # - name: create release draft
-      #   if: ${{steps.changelog.outputs.skipped == 'false'}}
-      #   # https://github.com/softprops/action-gh-release
-      #   uses: softprops/action-gh-release@v1
-      #   env:
-      #     # The token is provided by Actions, you do not need to create your own token
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ steps.changelog.outputs.tag }}
-      #     name: ${{ steps.changelog.outputs.tag }}
-      #     body: ${{steps.changelog.outputs.clean_changelog}}
-      #     draft: true
-      #     prerelease: false
-      #     files: deployment.zip
+      - name: commit CITATION.cff
+        # https://github.com/stefanzweifel/git-auto-commit-action
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "release: update citation file"
+          file_pattern: CITATION.cff
+
+  draft_release:
+    if: needs.release_tag.outputs.skipped == false
+    needs: [release_tag, deployment_files]
+    name: create release
+    runs-on: ubuntu-latest
+    steps:
+      - name: get deployment.zip
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment
+
+      - name: validate all info
+        run: |
+          echo show files
+          ls -lha
+          echo tag_name=${{needs.release_tag.outputs.tag}}
+          echo changelog
+          echo ${{needs.release_tag.outputs.changelog}}
+
+      - name: create release draft
+        if: ${{steps.changelog.outputs.skipped == 'false'}}
+        # https://github.com/softprops/action-gh-release
+        uses: softprops/action-gh-release@v1
+        env:
+          # The token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.release_tag.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
+          body: ${{steps.changelog.outputs.clean_changelog}}
+          draft: true
+          prerelease: false
+          files: deployment.zip
